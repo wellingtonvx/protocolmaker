@@ -14,7 +14,10 @@ export default function Home() {
   }
 
   function handleDeleteItem(id) {
-    return setDados((dado) => dado.splice(id, 1));
+    const newDados = [...dados];
+    newDados.splice(id, 1);
+
+    return setDados([...newDados]);
   }
 
   useEffect(() => {}, [dados]);
