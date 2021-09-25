@@ -7,17 +7,14 @@ import Select from "../components/Form/Select";
 export default function Home() {
   const [dados, setDados] = useState([]);
 
-  function handleAddData(data) {
-    setDados([...dados, data]);
+  console.log(dados);
 
-    console.log(dados);
+  function handleAddData(data) {
+    return setDados((dado) => [...dado, data]);
   }
 
   function handleDeleteItem(id) {
-    const newDados = dados;
-    newDados.splice(id, 1);
-
-    return setDados(newDados);
+    return setDados((dado) => dado.splice(id, 1));
   }
 
   useEffect(() => {}, [dados]);
