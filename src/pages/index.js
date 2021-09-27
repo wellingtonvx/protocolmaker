@@ -2,31 +2,42 @@ import { useState } from "react";
 import { Form } from "@unform/web";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
 
-import { headers } from "../components/JsPDF";
+import { CreateProtocol } from "../components/JsPDF";
 
-import styles from "../styles/Home.module.css";
 import Input from "../components/Form/Input";
 import Select from "../components/Form/Select";
+import { Sedes, Ti } from "../utils/data";
+
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
-  const [dados, setDados] = useState([]);
-  const doc = jsPDF();
+  const [items, setItems] = useState([]);
+  const [infos, setInfos] = useState();
+  const [protocolNumber, setProtocolNumber] = useState();
+  const [yearProtocol, setYearProtocol] = useState("2021");
 
-  const schema = Yup.object().shape({
+  const itemSchema = Yup.object().shape({
     material: Yup.string().required(),
     configuracao: Yup.string().required(),
     motivo: Yup.string().required(),
     patrimonio: Yup.string().required(),
   });
 
+  const infoSchema = Yup.object().shape({
+    sedeRemetente: Yup.string().required(),
+    sedeDestino: Yup.string().required(),
+    tiRemetente: Yup.string().required(),
+    tiDestinatario: Yup.string().required(),
+    tecRemetente: Yup.string().required(),
+    tecDestinatario: Yup.string().required(),
+  });
+
   async function handleAddData(data, { reset }) {
     try {
-      await schema.validate(data);
+      await itemSchema.validate(data);
 
-      setDados((dado) => [...dado, data]);
+      setItems((item) => [...item, data]);
 
       reset();
     } catch (error) {
@@ -34,53 +45,85 @@ export default function Home() {
     }
   }
 
-  function handleDeleteItem(id) {
-    const newDados = [...dados];
-    newDados.splice(id, 1);
-
-    return setDados([...newDados]);
+  function handleAddInfo(data) {
+    setInfos(data);
   }
 
-  function handleCreateProtocol() {
-    const data = dados.map((item) => Object.values(item));
-    doc.addImage("/images/logo.png", "png", 10, 10, 30, 15);
-    doc.autoTable(headers, data, {
-      margin: { top: 40 },
-      headStyles: {
-        halign: "center",
-        fontSize: 12,
-        lineColor: "#000",
-        lineWidth: 0.3,
-        fillColor: false,
-        textColor: "#000",
-      },
-      bodyStyles: {
-        textColor: "#000000",
-        cellPadding: 1,
-        halign: "center",
-        valign: "middle",
-        lineColor: "#000",
-        lineWidth: 0.1,
-      },
-    });
-    doc.save(`alguma coisa.pdf`);
+  function handleDeleteItem(id) {
+    const newDados = [...items];
+    newDados.splice(id, 1);
+
+    return setItems([...newDados]);
+  }
+
+  async function handleCreateProtocol() {
+    try {
+      await infoSchema.validate(infos);
+
+      CreateProtocol(items, infos, protocolNumber, yearProtocol);
+    } catch (error) {
+      console.log(error);
+      toast.error("algumas informações estão em branco");
+    }
   }
 
   return (
     <div className={styles.container}>
       <h1>Protocolo Antares</h1>
       <h3>Protocolo de movimentação de equipamentos de TI</h3>
+      <div>
+        <span>Protocolo Nº</span>
+        <input
+          type="number"
+          onChange={(e) => setProtocolNumber(e.target.value)}
+        />
+        <span> / </span>
+        <select name="year" onChange={(e) => setYearProtocol(e.target.value)}>
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+        </select>
+      </div>
 
+      {/**Adicionando um item da lista */}
       <Form onSubmit={handleAddData}>
-        <Input name="Qtd" type="number" />
-        <Input name="material" type="text" />
-        <Input name="configuracao" type="text" />
-        <Input name="motivo" type="text" />
-        <Input name="patrimonio" type="number" />
+        <Input name="Qtd" type="number" placeholder="Quantidade" />
+        <Input name="material" type="text" placeholder="Material" />
+        <Input name="configuracao" type="text" placeholder="Configuração" />
+        <Input name="motivo" type="text" placeholder="Motivo" />
+        <Input name="patrimonio" type="number" placeholder="Patrimônio" />
 
-        <Select name="sede" />
+        <button type="submit">Adicionar</button>
+      </Form>
 
-        <button type="submit">Enviar</button>
+      {/**Escolhendo a sede de destino e a remetente */}
+      <Form onSubmit={handleAddInfo}>
+        <Select name="sedeRemetente">
+          {Sedes.map((sede) => (
+            <option key={sede}>{sede}</option>
+          ))}
+        </Select>
+
+        <Select name="sedeDestino">
+          {Sedes.map((sede) => (
+            <option key={sede}>{sede}</option>
+          ))}
+        </Select>
+
+        <Select name="tiRemetente">
+          {Ti.map((sede) => (
+            <option key={sede}>{sede}</option>
+          ))}
+        </Select>
+        <Select name="tiDestinatario">
+          {Ti.map((sede) => (
+            <option key={sede}>{sede}</option>
+          ))}
+        </Select>
+        <Input name="tecRemetente" />
+        <Input name="tecDestinatario" />
+        <button type="submit" onClick={handleAddInfo}>
+          guardar informações
+        </button>
       </Form>
 
       <div>
@@ -91,7 +134,7 @@ export default function Home() {
           <li style={{ marginRight: "10px" }}>Motivo</li>
           <li style={{ marginRight: "10px" }}>Patrimonio</li>
         </ul>
-        {dados.map((item, index) => {
+        {items.map((item, index) => {
           return (
             <ul key={index} style={{ display: "flex", listStyle: "none" }}>
               <li style={{ marginRight: "10px" }}>{item.Qtd}</li>
