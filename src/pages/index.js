@@ -1,16 +1,37 @@
-import { useState, useEffect } from "react";
-import styles from "../styles/Home.module.css";
+import { useState } from "react";
 import { Form } from "@unform/web";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+
+import { headers } from "../components/JsPDF";
+
+import styles from "../styles/Home.module.css";
 import Input from "../components/Form/Input";
 import Select from "../components/Form/Select";
 
 export default function Home() {
   const [dados, setDados] = useState([]);
+  const doc = jsPDF();
 
-  console.log(dados);
+  const schema = Yup.object().shape({
+    material: Yup.string().required(),
+    configuracao: Yup.string().required(),
+    motivo: Yup.string().required(),
+    patrimonio: Yup.string().required(),
+  });
 
-  function handleAddData(data) {
-    return setDados((dado) => [...dado, data]);
+  async function handleAddData(data, { reset }) {
+    try {
+      await schema.validate(data);
+
+      setDados((dado) => [...dado, data]);
+
+      reset();
+    } catch (error) {
+      toast.error("Todos os campos precisão estar preenchidos");
+    }
   }
 
   function handleDeleteItem(id) {
@@ -20,7 +41,30 @@ export default function Home() {
     return setDados([...newDados]);
   }
 
-  useEffect(() => {}, [dados]);
+  function handleCreateProtocol() {
+    const data = dados.map((item) => Object.values(item));
+    doc.addImage("/images/logo.png", "png", 10, 10, 30, 15);
+    doc.autoTable(headers, data, {
+      margin: { top: 40 },
+      headStyles: {
+        halign: "center",
+        fontSize: 12,
+        lineColor: "#000",
+        lineWidth: 0.3,
+        fillColor: false,
+        textColor: "#000",
+      },
+      bodyStyles: {
+        textColor: "#000000",
+        cellPadding: 1,
+        halign: "center",
+        valign: "middle",
+        lineColor: "#000",
+        lineWidth: 0.1,
+      },
+    });
+    doc.save(`alguma coisa.pdf`);
+  }
 
   return (
     <div className={styles.container}>
@@ -28,6 +72,7 @@ export default function Home() {
       <h3>Protocolo de movimentação de equipamentos de TI</h3>
 
       <Form onSubmit={handleAddData}>
+        <Input name="Qtd" type="number" />
         <Input name="material" type="text" />
         <Input name="configuracao" type="text" />
         <Input name="motivo" type="text" />
@@ -40,6 +85,7 @@ export default function Home() {
 
       <div>
         <ul style={{ display: "flex", listStyle: "none" }}>
+          <li style={{ marginRight: "10px" }}>Qtd</li>
           <li style={{ marginRight: "10px" }}>Material</li>
           <li style={{ marginRight: "10px" }}>Configuração</li>
           <li style={{ marginRight: "10px" }}>Motivo</li>
@@ -48,6 +94,7 @@ export default function Home() {
         {dados.map((item, index) => {
           return (
             <ul key={index} style={{ display: "flex", listStyle: "none" }}>
+              <li style={{ marginRight: "10px" }}>{item.Qtd}</li>
               <li style={{ marginRight: "10px" }}>{item.material}</li>
               <li style={{ marginRight: "10px" }}>{item.configuracao}</li>
               <li style={{ marginRight: "10px" }}>{item.motivo}</li>
@@ -57,23 +104,7 @@ export default function Home() {
           );
         })}
       </div>
+      <button onClick={handleCreateProtocol}>Gerar protocolo</button>
     </div>
   );
 }
-
-/**
- * <form onSubmit={handleAddData}>
-        <span>Material</span>
-        <input type="text" onChange={(e) => setMaterial(e.target.value)} />
-        <span>Configuração</span>
-        <input type="text" onChange={(e) => setConfiguracao(e.target.value)} />
-        <span>Motivo</span>
-        <input type="text" onChange={(e) => setMotivo(e.target.value)} />
-        <span>Nº Patrimônio</span>
-        <input type="number" onChange={(e) => setPatrimonio(e.target.value)} />
-
-        <button type="submit">Adicionar</button>
-      </form>
-
-      <ul>{data.map((item) => console.log(item.material))}</ul>
- */

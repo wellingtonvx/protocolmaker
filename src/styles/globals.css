@@ -1,3 +1,9 @@
+:root {
+  --succssesColor : '#0197F6';
+  --errorColor : '#F2AF29';
+}
+
+
 html,
 body {
   padding: 0;
@@ -14,3 +20,4 @@ a {
 * {
   box-sizing: border-box;
 }
+
