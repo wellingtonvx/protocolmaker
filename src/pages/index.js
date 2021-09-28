@@ -1,50 +1,26 @@
-import { useState } from "react";
-import { Form } from "@unform/web";
-import * as Yup from "yup";
+import { useState, useContext } from "react";
 import { toast } from "react-toastify";
-import Image from "next/image";
+import { Form } from "@unform/web";
 
 import { CreateProtocol } from "../components/JsPDF";
+import { Forms } from "../components/Form";
+
+import { DataContext } from "../context/DataContext";
 
 import Input from "../components/Form/Input";
 import Select from "../components/Form/Select";
+import Header from "../components/Header";
+
 import { Sedes, Ti } from "../utils/data";
 
+import styles from "../styles/Home.module.scss";
+
 export default function Home() {
-  const [items, setItems] = useState([]);
   const [infos, setInfos] = useState();
   const [protocolNumber, setProtocolNumber] = useState();
   const [yearProtocol, setYearProtocol] = useState("2021");
 
-  const itemSchema = Yup.object().shape({
-    material: Yup.string().required(),
-    configuracao: Yup.string().required(),
-    motivo: Yup.string().required(),
-    patrimonio: Yup.string().required(),
-  });
-
-  const infoSchema = Yup.object().shape({
-    sedeRemetente: Yup.string().required(),
-    sedeDestino: Yup.string().required(),
-    tiRemetente: Yup.string().required(),
-    tiDestinatario: Yup.string().required(),
-    tecRemetente: Yup.string().required(),
-    tecDestinatario: Yup.string().required(),
-  });
-
-  console.log(items);
-
-  async function handleAddData(data, { reset }) {
-    try {
-      await itemSchema.validate(data);
-
-      setItems((item) => [...item, data]);
-
-      reset();
-    } catch (error) {
-      toast.error("Todos os campos precisão estar preenchidos");
-    }
-  }
+  const { items, handleSetItems } = useContext(DataContext);
 
   function handleAddInfo(data) {
     setInfos(data);
@@ -54,7 +30,7 @@ export default function Home() {
     const newDados = [...items];
     newDados.splice(id, 1);
 
-    return setItems([...newDados]);
+    return handleSetItems([...newDados]);
   }
 
   async function handleCreateProtocol() {
@@ -69,17 +45,9 @@ export default function Home() {
   }
 
   return (
-    <div className="container m-auto mt-6 bg-gray-300 border-2 2xl">
-      <div className="absolute left-16 top-10">
-        <Image src="/images/logo.png" width={120} height={60} alt="logo" />
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        <h1 className="m-3 text-4xl ">Protocolo Antares</h1>
-        <h3 className="m-3 text-xl">
-          Protocolo de movimentação de equipamentos de TI
-        </h3>
-      </div>
-      <div className="px-20 mt-8">
+    <div className={styles.container}>
+      <Header />
+      <div>
         <span>Protocolo Nº: </span>
         <input
           type="number"
@@ -92,113 +60,23 @@ export default function Home() {
         </select>
       </div>
 
+      <Forms />
+
       {/**Adicionando um item da lista */}
 
-      <Form
-        onSubmit={handleAddData}
-        className="flex items-center justify-between px-20 pt-5 pb-1"
-      >
-        <table className="table-auto ">
-          <thead>
-            <tr>
-              <th>QTD</th>
-              <th>Material</th>
-              <th>Configuracão</th>
-              <th>Motivo</th>
-              <th>Patrimônio</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <Input
-                  name="qtd"
-                  type="number"
-                  className="w-16 text-center border"
-                />
-              </td>
-              <td>
-                <Input
-                  name="material"
-                  type="text"
-                  className="text-center border w-72"
-                />
-              </td>
-              <td>
-                <Input
-                  name="configuracao"
-                  type="text"
-                  className="text-center border w-72"
-                />
-              </td>
-              <td>
-                <Input
-                  name="motivo"
-                  type="text"
-                  className="text-center border w-60"
-                />
-              </td>
-              <td>
-                <Input
-                  name="patrimonio"
-                  type="number"
-                  className="w-24 text-center border"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <button
-          className="px-2 py-1 mt-5 border rounded-md bg-red-50"
-          type="submit"
-        >
-          Adicionar
-        </button>
-      </Form>
-      <h2 className="p-3 text-xl text-center">Items Adicionados</h2>
-      <div className="flex items-center justify-between px-20 pt-1">
-        <table className="table-auto ">
+      <h2>Items Adicionados</h2>
+      <div>
+        <table c>
           <tbody>
             {items.map((item, index) => (
-              <tr key={index} className="flex items-center justify-between ">
-                <td
-                  style={{ marginRight: "2px" }}
-                  className="w-16 text-center bg-yellow-100 border"
-                >
-                  {item.qtd}
-                </td>
-                <td
-                  style={{ marginRight: "2px" }}
-                  className="text-center bg-yellow-100 border w-72"
-                >
-                  {item.material}
-                </td>
-                <td
-                  style={{ marginRight: "2px" }}
-                  className="text-center bg-yellow-100 border w-72"
-                >
-                  {item.configuracao}
-                </td>
-                <td
-                  style={{ marginRight: "2px" }}
-                  className="text-center bg-yellow-100 border w-60"
-                >
-                  {item.motivo}
-                </td>
-                <td
-                  style={{ marginRight: "2px" }}
-                  className="w-24 text-center bg-yellow-100 border"
-                >
-                  {item.patrimonio}
-                </td>
+              <tr key={index}>
+                <td style={{ marginRight: "2px" }}>{item.qtd}</td>
+                <td style={{ marginRight: "2px" }}>{item.material}</td>
+                <td style={{ marginRight: "2px" }}>{item.configuracao}</td>
+                <td style={{ marginRight: "2px" }}>{item.motivo}</td>
+                <td style={{ marginRight: "2px" }}>{item.patrimonio}</td>
                 <td>
-                  <button
-                    className="w-8 text-white bg-red-600 border rounded-md color"
-                    onClick={handleDeleteItem}
-                  >
-                    X
-                  </button>
+                  <button onClick={handleDeleteItem}>X</button>
                 </td>
               </tr>
             ))}
@@ -240,7 +118,12 @@ export default function Home() {
         </button>
       </Form>
 
-      <button onClick={handleCreateProtocol}>Gerar protocolo</button>
+      <button
+        className="bg-white border rounded"
+        onClick={handleCreateProtocol}
+      >
+        Gerar protocolo
+      </button>
     </div>
   );
 }

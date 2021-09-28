@@ -1,0 +1,22 @@
+.container {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem;
+
+  > img {
+    width: 14rem;
+
+  }
+
+  >div {
+    margin-left: 3rem;
+
+    h1 {
+      padding-bottom: .5rem;
+    }
+  }
+ 
+}
