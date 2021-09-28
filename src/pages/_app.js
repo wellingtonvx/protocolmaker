@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "tailwindcss/tailwind.css";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";

@@ -2,14 +2,13 @@ import { useState } from "react";
 import { Form } from "@unform/web";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 import { CreateProtocol } from "../components/JsPDF";
 
 import Input from "../components/Form/Input";
 import Select from "../components/Form/Select";
 import { Sedes, Ti } from "../utils/data";
-
-import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const [items, setItems] = useState([]);
@@ -32,6 +31,8 @@ export default function Home() {
     tecRemetente: Yup.string().required(),
     tecDestinatario: Yup.string().required(),
   });
+
+  console.log(items);
 
   async function handleAddData(data, { reset }) {
     try {
@@ -68,11 +69,18 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.container}>
-      <h1>Protocolo Antares</h1>
-      <h3>Protocolo de movimentação de equipamentos de TI</h3>
-      <div>
-        <span>Protocolo Nº</span>
+    <div className="container m-auto mt-6 bg-gray-300 border-2 2xl">
+      <div className="absolute left-16 top-10">
+        <Image src="/images/logo.png" width={120} height={60} alt="logo" />
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="m-3 text-4xl ">Protocolo Antares</h1>
+        <h3 className="m-3 text-xl">
+          Protocolo de movimentação de equipamentos de TI
+        </h3>
+      </div>
+      <div className="px-20 mt-8">
+        <span>Protocolo Nº: </span>
         <input
           type="number"
           onChange={(e) => setProtocolNumber(e.target.value)}
@@ -85,18 +93,124 @@ export default function Home() {
       </div>
 
       {/**Adicionando um item da lista */}
-      <Form onSubmit={handleAddData}>
-        <Input name="Qtd" type="number" placeholder="Quantidade" />
-        <Input name="material" type="text" placeholder="Material" />
-        <Input name="configuracao" type="text" placeholder="Configuração" />
-        <Input name="motivo" type="text" placeholder="Motivo" />
-        <Input name="patrimonio" type="number" placeholder="Patrimônio" />
 
-        <button type="submit">Adicionar</button>
+      <Form
+        onSubmit={handleAddData}
+        className="flex items-center justify-between px-20 pt-5 pb-1"
+      >
+        <table className="table-auto ">
+          <thead>
+            <tr>
+              <th>QTD</th>
+              <th>Material</th>
+              <th>Configuracão</th>
+              <th>Motivo</th>
+              <th>Patrimônio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <Input
+                  name="qtd"
+                  type="number"
+                  className="w-16 text-center border"
+                />
+              </td>
+              <td>
+                <Input
+                  name="material"
+                  type="text"
+                  className="text-center border w-72"
+                />
+              </td>
+              <td>
+                <Input
+                  name="configuracao"
+                  type="text"
+                  className="text-center border w-72"
+                />
+              </td>
+              <td>
+                <Input
+                  name="motivo"
+                  type="text"
+                  className="text-center border w-60"
+                />
+              </td>
+              <td>
+                <Input
+                  name="patrimonio"
+                  type="number"
+                  className="w-24 text-center border"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button
+          className="px-2 py-1 mt-5 border rounded-md bg-red-50"
+          type="submit"
+        >
+          Adicionar
+        </button>
       </Form>
+      <h2 className="p-3 text-xl text-center">Items Adicionados</h2>
+      <div className="flex items-center justify-between px-20 pt-1">
+        <table className="table-auto ">
+          <tbody>
+            {items.map((item, index) => (
+              <tr key={index} className="flex items-center justify-between ">
+                <td
+                  style={{ marginRight: "2px" }}
+                  className="w-16 text-center bg-yellow-100 border"
+                >
+                  {item.qtd}
+                </td>
+                <td
+                  style={{ marginRight: "2px" }}
+                  className="text-center bg-yellow-100 border w-72"
+                >
+                  {item.material}
+                </td>
+                <td
+                  style={{ marginRight: "2px" }}
+                  className="text-center bg-yellow-100 border w-72"
+                >
+                  {item.configuracao}
+                </td>
+                <td
+                  style={{ marginRight: "2px" }}
+                  className="text-center bg-yellow-100 border w-60"
+                >
+                  {item.motivo}
+                </td>
+                <td
+                  style={{ marginRight: "2px" }}
+                  className="w-24 text-center bg-yellow-100 border"
+                >
+                  {item.patrimonio}
+                </td>
+                <td>
+                  <button
+                    className="w-8 text-white bg-red-600 border rounded-md color"
+                    onClick={handleDeleteItem}
+                  >
+                    X
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/**Escolhendo a sede de destino e a remetente */}
-      <Form onSubmit={handleAddInfo}>
+      <Form
+        onSubmit={handleAddInfo}
+        className="flex items-center justify-between px-20 py-5"
+      >
         <Select name="sedeRemetente">
           {Sedes.map((sede) => (
             <option key={sede}>{sede}</option>
@@ -126,28 +240,29 @@ export default function Home() {
         </button>
       </Form>
 
-      <div>
-        <ul style={{ display: "flex", listStyle: "none" }}>
-          <li style={{ marginRight: "10px" }}>Qtd</li>
-          <li style={{ marginRight: "10px" }}>Material</li>
-          <li style={{ marginRight: "10px" }}>Configuração</li>
-          <li style={{ marginRight: "10px" }}>Motivo</li>
-          <li style={{ marginRight: "10px" }}>Patrimonio</li>
-        </ul>
-        {items.map((item, index) => {
-          return (
-            <ul key={index} style={{ display: "flex", listStyle: "none" }}>
-              <li style={{ marginRight: "10px" }}>{item.Qtd}</li>
-              <li style={{ marginRight: "10px" }}>{item.material}</li>
-              <li style={{ marginRight: "10px" }}>{item.configuracao}</li>
-              <li style={{ marginRight: "10px" }}>{item.motivo}</li>
-              <li style={{ marginRight: "10px" }}>{item.patrimonio}</li>
-              <button onClick={() => handleDeleteItem(index)}>X </button>
-            </ul>
-          );
-        })}
-      </div>
       <button onClick={handleCreateProtocol}>Gerar protocolo</button>
     </div>
   );
 }
+
+// <div>
+// <ul style={{ display: "flex", listStyle: "none" }}>
+//   <li style={{ marginRight: "10px" }}>Qtd</li>
+//   <li style={{ marginRight: "10px" }}>Material</li>
+//   <li style={{ marginRight: "10px" }}>Configuração</li>
+//   <li style={{ marginRight: "10px" }}>Motivo</li>
+//   <li style={{ marginRight: "10px" }}>Patrimonio</li>
+// </ul>
+// {items.map((item, index) => {
+//   return (
+//     <ul key={index} style={{ display: "flex", listStyle: "none" }}>
+//       <li style={{ marginRight: "10px" }}>{item.Qtd}</li>
+//       <li style={{ marginRight: "10px" }}>{item.material}</li>
+//       <li style={{ marginRight: "10px" }}>{item.configuracao}</li>
+//       <li style={{ marginRight: "10px" }}>{item.motivo}</li>
+//       <li style={{ marginRight: "10px" }}>{item.patrimonio}</li>
+//       <button onClick={() => handleDeleteItem(index)}>X </button>
+//     </ul>
+//   );
+// })}
+// </div>

@@ -1,23 +1,23 @@
-:root {
-  --succssesColor : '#0197F6';
-  --errorColor : '#F2AF29';
-}
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-html,
-body {
-  padding: 0;
+*{
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
+  padding: 0;
   box-sizing: border-box;
 }
 
+body {
+  font-family: sans-serif;
+}
+
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(to right bottom, #00f260, #8575e6); 
+}
+
+::-webkit-scrollbar{
+  width: 8px;
+  height: 0px;
+}
