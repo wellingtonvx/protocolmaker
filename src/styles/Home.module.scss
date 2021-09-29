@@ -3,6 +3,96 @@
   width: 100%;
 
   border: 1px solid #000;
+  border-radius: 1rem;
 
-  margin: 0 auto;
+  margin: 1rem auto;
+}
+
+.protocol{
+  margin: 2rem 3rem;
+  font-size: 1.1rem;
+  
+
+  input {
+    width: 4rem;
+    font-size: 1.05rem
+  }
+
+  select {
+    font-size: 1.05rem
+  }
+}
+
+.itemsAdd {
+  text-align: center;
+  margin: 1rem;
+
+  ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+
+
+    li {
+      margin-right: 2rem;
+
+      button {
+        padding: .2rem .4rem; 
+      }
+    }
+  }
+}
+
+.remetentInfo {
+  margin: 2rem;
+  display: flex;
+
+  font-size: 1.1rem;
+
+  >div {
+    display: flex;
+
+    ul {
+      list-style: none;    
+      margin: 1rem;
+  
+  
+      li {
+        margin: .5rem;
+
+        select {
+          width: 100%;
+          font-size: 1rem
+        }
+
+        input {
+          font-size: 1rem
+        }
+       
+      }
+    }
+  }
+
+
+  button {
+    width: 6rem;
+    height: 3rem;
+    padding: .5rem;
+    font-size: .9rem;
+
+    cursor: pointer;
+    margin-top: 9rem;
+  }
+}
+
+.makeProtocol {
+  text-align: center;
+  margin: 2rem;
+
+  button {
+    padding: 1rem;
+    font-size: 1rem;
+  }
 }

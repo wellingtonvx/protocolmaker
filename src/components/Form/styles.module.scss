@@ -1,0 +1,48 @@
+.container {
+  margin: 2rem;
+
+  >div {
+    display: flex;
+
+    ul {
+      list-style: none;
+    
+   
+      
+      li {
+        margin: .8rem 1rem;
+        font-size: 1.1rem;
+
+        input {
+          width: 30rem;
+          font-size: 1.1rem;
+        }
+      }
+      li:first-child {
+        
+        input {
+          width: 4rem;
+        }
+      }
+      li:last-child {
+        
+        input {
+          width: 4rem;
+        }
+      }
+    }
+    ul:first-child {
+      
+      li {
+        margin-top: 1rem;
+      }
+    }
+  }
+
+  button {
+    margin: 1rem;
+    padding: .5rem;
+
+    cursor: pointer;
+  }
+}

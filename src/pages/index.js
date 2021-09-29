@@ -11,9 +11,10 @@ import Input from "../components/Form/Input";
 import Select from "../components/Form/Select";
 import Header from "../components/Header";
 
-import { Sedes, Ti } from "../utils/data";
+import { Ti, Sedes } from "../utils/data";
 
 import styles from "../styles/Home.module.scss";
+import { infoSchema } from "../utils/YupSchemas";
 
 export default function Home() {
   const [infos, setInfos] = useState();
@@ -22,6 +23,7 @@ export default function Home() {
 
   const { items, handleSetItems } = useContext(DataContext);
 
+  console.log(infos);
   function handleAddInfo(data) {
     setInfos(data);
   }
@@ -40,14 +42,14 @@ export default function Home() {
       CreateProtocol(items, infos, protocolNumber, yearProtocol);
     } catch (error) {
       console.log(error);
-      toast.error("algumas informações estão em branco");
+      error.errors.map((err) => toast.error(err.msg));
     }
   }
 
   return (
     <div className={styles.container}>
       <Header />
-      <div>
+      <div className={styles.protocol}>
         <span>Protocolo Nº: </span>
         <input
           type="number"
@@ -63,89 +65,80 @@ export default function Home() {
       <Forms />
 
       {/**Adicionando um item da lista */}
+      <div className={styles.itemsAdd}>
+        <h2>Itens Adicionados</h2>
 
-      <h2>Items Adicionados</h2>
-      <div>
-        <table c>
-          <tbody>
-            {items.map((item, index) => (
-              <tr key={index}>
-                <td style={{ marginRight: "2px" }}>{item.qtd}</td>
-                <td style={{ marginRight: "2px" }}>{item.material}</td>
-                <td style={{ marginRight: "2px" }}>{item.configuracao}</td>
-                <td style={{ marginRight: "2px" }}>{item.motivo}</td>
-                <td style={{ marginRight: "2px" }}>{item.patrimonio}</td>
-                <td>
-                  <button onClick={handleDeleteItem}>X</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {items.map((item, index) => (
+          <ul key={index}>
+            <li>{item.qtd}</li>
+            <li>{item.material}</li>
+            <li>{item.configuracao}</li>
+            <li>{item.motivo}</li>
+            <li>{item.patrimonio}</li>
+            <li>
+              <button onClick={handleDeleteItem}>X</button>
+            </li>
+          </ul>
+        ))}
       </div>
 
       {/**Escolhendo a sede de destino e a remetente */}
-      <Form
-        onSubmit={handleAddInfo}
-        className="flex items-center justify-between px-20 py-5"
-      >
-        <Select name="sedeRemetente">
-          {Sedes.map((sede) => (
-            <option key={sede}>{sede}</option>
-          ))}
-        </Select>
+      <Form onSubmit={handleAddInfo} className={styles.remetentInfo}>
+        <div>
+          <ul>
+            <li>Sede Remetente: </li>
+            <li>Sede Destino: </li>
+            <li>Remetente: </li>
+            <li>Ti remetente: </li>
+            <li>Destinatário: </li>
+            <li>Ti destinatário: </li>
+          </ul>
+          <ul>
+            <li>
+              <Select name="sedeRemetente">
+                {Sedes.map((sede) => (
+                  <option key={sede}>{sede}</option>
+                ))}
+              </Select>
+            </li>
+            <li>
+              <Select name="sedeDestino">
+                {Sedes.map((sede) => (
+                  <option key={sede}>{sede}</option>
+                ))}
+              </Select>
+            </li>
+            <li>
+              <Input name="tecRemetente" />
+            </li>
+            <li>
+              <Select name="tiRemetente">
+                {Ti.map((sede) => (
+                  <option key={sede}>{sede}</option>
+                ))}
+              </Select>
+            </li>
+            <li>
+              <Input name="tecDestinatario" />
+            </li>
+            <li>
+              <Select name="sedeDestinatario">
+                {Ti.map((sede) => (
+                  <option key={sede}>{sede}</option>
+                ))}
+              </Select>
+            </li>
+          </ul>
+        </div>
 
-        <Select name="sedeDestino">
-          {Sedes.map((sede) => (
-            <option key={sede}>{sede}</option>
-          ))}
-        </Select>
-
-        <Select name="tiRemetente">
-          {Ti.map((sede) => (
-            <option key={sede}>{sede}</option>
-          ))}
-        </Select>
-        <Select name="tiDestinatario">
-          {Ti.map((sede) => (
-            <option key={sede}>{sede}</option>
-          ))}
-        </Select>
-        <Input name="tecRemetente" />
-        <Input name="tecDestinatario" />
         <button type="submit" onClick={handleAddInfo}>
           guardar informações
         </button>
       </Form>
 
-      <button
-        className="bg-white border rounded"
-        onClick={handleCreateProtocol}
-      >
-        Gerar protocolo
-      </button>
+      <div className={styles.makeProtocol}>
+        <button onClick={handleCreateProtocol}>Gerar protocolo</button>
+      </div>
     </div>
   );
 }
-
-// <div>
-// <ul style={{ display: "flex", listStyle: "none" }}>
-//   <li style={{ marginRight: "10px" }}>Qtd</li>
-//   <li style={{ marginRight: "10px" }}>Material</li>
-//   <li style={{ marginRight: "10px" }}>Configuração</li>
-//   <li style={{ marginRight: "10px" }}>Motivo</li>
-//   <li style={{ marginRight: "10px" }}>Patrimonio</li>
-// </ul>
-// {items.map((item, index) => {
-//   return (
-//     <ul key={index} style={{ display: "flex", listStyle: "none" }}>
-//       <li style={{ marginRight: "10px" }}>{item.Qtd}</li>
-//       <li style={{ marginRight: "10px" }}>{item.material}</li>
-//       <li style={{ marginRight: "10px" }}>{item.configuracao}</li>
-//       <li style={{ marginRight: "10px" }}>{item.motivo}</li>
-//       <li style={{ marginRight: "10px" }}>{item.patrimonio}</li>
-//       <button onClick={() => handleDeleteItem(index)}>X </button>
-//     </ul>
-//   );
-// })}
-// </div>

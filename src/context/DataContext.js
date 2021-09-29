@@ -7,15 +7,13 @@ export const DataContext = createContext({});
 export function DataContextProvider({ children }) {
   const [items, setItems] = useState([]);
 
-  console.log(items);
-
   async function handleAddData(data, { reset }) {
     try {
       await itemSchema.validate(data);
 
       setItems((item) => [...item, data]);
 
-      reset();
+      // reset();
     } catch (error) {
       error.errors.map((err) => toast.error(err.msg));
     }

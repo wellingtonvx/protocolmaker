@@ -82,5 +82,5 @@ export function CreateProtocol(items, infos, protocolNumber, yearProtocol) {
   doc.setLineWidth(0.5);
   doc.line(10, heightText * 32, 70, heightText * 32);
 
-  doc.save(`Protocolo-${protocolNumber}.pdf`);
+  doc.save(`Protocolo.pdf`);
 }
