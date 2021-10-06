@@ -1,7 +1,8 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { toast } from "react-toastify";
 import { Form } from "@unform/web";
 import { RiDeleteBinLine } from "react-icons/ri";
+import * as Yup from "yup";
 
 import { CreateProtocol } from "../components/JsPDF";
 import { Forms } from "../components/Form";
@@ -25,14 +26,11 @@ export default function Home() {
 
   const { items, handleSetItems } = useContext(DataContext);
 
+  const formRef = useRef(null);
+
   async function handleAddInfo(data) {
-    try {
-      await infoSchema.validate(infos);
-      setInfos(data);
-      toast.success("Dados salvos");
-    } catch (error) {
-      error.errors.map((err) => toast.error(err.msg));
-    }
+    setInfos(data);
+    toast.success("Dados salvos");
   }
 
   function handleDeleteItem(id) {
@@ -41,11 +39,20 @@ export default function Home() {
 
   async function handleCreateProtocol() {
     try {
-      await infoSchema.validate(infos);
-
+      await infoSchema.validate(infos, { abortEarly: false });
+      formRef.current.setErrors({});
       CreateProtocol(items, infos, protocolNumber, yearProtocol, obs);
     } catch (error) {
-      error.errors.map((err) => toast.error(err.msg));
+      // error.errors.map((err) => toast.error(err.msg));
+
+      const errorsMessages = {};
+
+      error.inner.forEach((err) => {
+        console.log(err);
+        errorsMessages[err.path] = err.message;
+      });
+
+      formRef.current.setErrors(errorsMessages);
     }
   }
 
@@ -106,7 +113,11 @@ export default function Home() {
       </div>
 
       {/**Escolhendo a sede de destino e a remetente */}
-      <Form onSubmit={handleAddInfo} className={styles.remetentInfo}>
+      <Form
+        ref={formRef}
+        onSubmit={handleAddInfo}
+        className={styles.remetentInfo}
+      >
         <div>
           <ul className={styles.first}>
             <li>Sede Remetente: </li>

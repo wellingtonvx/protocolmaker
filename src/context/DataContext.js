@@ -13,7 +13,7 @@ export function DataContextProvider({ children }) {
       if (data.patrimonio === "undefined" || "null") {
         data.patrimonio = "S/N";
       }
-      await itemSchema.validate(data);
+      await itemSchema.validate(data, { abortEarly: false });
       let id = v4();
       data = { ...data, id };
 
