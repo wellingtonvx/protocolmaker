@@ -8,7 +8,7 @@ export const DataContext = createContext({});
 export function DataContextProvider({ children }) {
   const [items, setItems] = useState([]);
 
-  async function handleAddData(data, { reset }) {
+  async function handleAddData(data) {
     try {
       if (data.patrimonio === "undefined" || "null") {
         data.patrimonio = "S/N";
@@ -18,8 +18,6 @@ export function DataContextProvider({ children }) {
       data = { ...data, id };
 
       setItems((item) => [...item, data]);
-
-      // reset();
     } catch (error) {
       error.errors.map((err) => toast.error(err.msg));
     }
