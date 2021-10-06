@@ -8,8 +8,9 @@ export const headers = [
   "Qtd",
   "Material",
   "Configuracão",
+  "Setor",
   "Motivo",
-  "Patrimonio",
+  "Patri.",
 ];
 
 export const HeadStyles = {
@@ -35,11 +36,17 @@ export const textHeader = [
   "right",
 ];
 
-export function CreateProtocol(items, infos, protocolNumber, yearProtocol) {
+export function CreateProtocol(
+  items,
+  infos,
+  protocolNumber,
+  yearProtocol,
+  obs
+) {
   const doc = jsPDF();
   const date = format(new Date(), "dd MMMM yyyy", { locale: pt });
-
-  console.log(infos);
+  const dateName = format(new Date(), "dd MM yyyy", { locale: pt });
+  const nameProtocol = `Protocolo:${protocolNumber} - ${infos.sedeRemetente} - ${dateName}`;
 
   const data = items.map((item) => Object.values(item));
   const heightText = data.length <= 5 ? 6 : data.length;
@@ -58,6 +65,14 @@ export function CreateProtocol(items, infos, protocolNumber, yearProtocol) {
     30,
     "right"
   );
+
+  /*------------------*/
+  doc.text("Observações", 10, heightText * 16.5);
+  doc.rect(10, heightText * 17, 190, 10);
+  doc.text(`${obs}`, 12, heightText * 18, {
+    maxWidth: 184,
+    align: "justify",
+  });
 
   /*------------------*/
   doc.text("SEDE REMETENTE: ", 10, heightText * 20, "left");
@@ -79,8 +94,20 @@ export function CreateProtocol(items, infos, protocolNumber, yearProtocol) {
 
   /*------------------*/
   doc.text(`Fortaleza, ${date}`, 10, heightText * 28, "left");
+
   doc.setLineWidth(0.5);
   doc.line(10, heightText * 32, 70, heightText * 32);
+  doc.text(`${infos.tecRemetente}`, 10, heightText * 33, "left");
+  doc.text(`${infos.tiRemetente}`, 10, heightText * 34, "left");
 
-  doc.save(`Protocolo.pdf`);
+  doc.setLineWidth(0.5);
+  doc.line(10, heightText * 37, 70, heightText * 37);
+  doc.text(`${infos.tecDestinatario}`, 10, heightText * 38, "left");
+  doc.text(`${infos.tiDestinatario}`, 10, heightText * 39, "left");
+
+  doc.setLineWidth(0.5);
+  doc.line(10, heightText * 43, 70, heightText * 43);
+  doc.text("Malote", 10, heightText * 44, "left");
+
+  doc.save(`${nameProtocol}.pdf`);
 }

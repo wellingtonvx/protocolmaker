@@ -8,6 +8,8 @@
   margin: 1rem auto;
 }
 
+
+
 .protocol{
   margin: 2rem 3rem;
   font-size: 1.1rem;
@@ -25,7 +27,13 @@
 
 .itemsAdd {
   text-align: center;
-  margin: 1rem;
+  margin: 2rem;
+
+  border-bottom: 1px solid #000;
+
+  h2 {
+    margin-bottom: 2rem;
+  }
 
   ul {
     list-style: none;
@@ -48,6 +56,7 @@
 .remetentInfo {
   margin: 2rem;
   display: flex;
+  flex-direction: row;
 
   font-size: 1.1rem;
 
@@ -64,14 +73,22 @@
 
         select {
           width: 100%;
-          font-size: 1rem
+          font-size: 1rem;
+          padding: .3rem;
         }
 
         input {
-          font-size: 1rem
+          font-size: 1rem;
+          padding: .3rem;
         }
        
       }
+    }
+
+    ul:first-child {
+       li {
+        padding: .3rem;
+       }
     }
   }
 
@@ -83,7 +100,7 @@
     font-size: .9rem;
 
     cursor: pointer;
-    margin-top: 9rem;
+    margin-top: 12.5rem;
   }
 }
 
@@ -95,4 +112,224 @@
     padding: 1rem;
     font-size: 1rem;
   }
+}
+
+.obs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  margin: 1rem;
+
+  span {
+    margin-top: 1rem;
+  }
+
+  textarea {
+    margin: 1rem;
+    padding: .5rem;
+    height: 5rem;
+    width: 50%;
+    font-size: 1rem;
+
+    text-align: center;
+  }
+
+  border-bottom: 1px solid #000;
+}
+
+@media screen and (max-width: 960px) {
+  .container {
+  
+    margin: 1rem;
+  }
+
+  .remetentInfo {
+    margin: 1rem;
+    display: flex;
+    flex-direction: row;
+    font-size: 1rem;
+  
+    >div {
+  
+      ul {
+        margin: 1rem;
+    
+        li {
+          margin: .5rem;
+  
+          select {
+            width: 90%;
+            font-size: 1rem;
+            padding: .3rem;
+          }
+  
+          input {
+            font-size: 1rem;
+            padding: .3rem;
+          }
+         
+        }
+      }
+  
+      ul:first-child {
+         li {
+          padding: .3rem;
+         }
+      }
+    }
+  
+  
+    button {
+      width: 6rem;
+      height: 3rem;
+      padding: .5rem;
+      font-size: .9rem;
+  
+      cursor: pointer;
+      margin-top: 12.5rem;
+    }
+  }
+
+
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    .remetentInfo {
+
+      >div {
+    
+        ul {
+          margin: 0.4rem;
+      
+      
+          li {
+            margin: .4rem;
+    
+            select {
+              width: 100%;
+              font-size: 1rem;
+              padding: .3rem;
+            }
+    
+            input {
+              font-size: 1rem;
+              padding: .3rem;
+            }
+           
+          }
+        }
+    
+        ul:first-child {
+           li {
+            padding: .4rem;
+           }
+        }
+      }
+    
+      button {
+        margin: 1rem auto;
+      }
+    }
+  }
+
+  .itemsAdd {
+    margin: 1rem;
+    
+    h2 {
+      margin-bottom: 1rem;
+    }
+    ul {
+      margin: 1rem;
+      li {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .container {
+
+    .remetentInfo {
+      margin: .5rem;
+      display: flex;
+      flex-direction: column;
+    
+      font-size: 1rem;
+    
+      >div {
+  
+        .first {
+          margin-top:1.2rem;
+          padding: .2rem;
+          li {
+            margin-left: -.7rem;
+            font-size: 0.902rem;
+            
+    
+            input {
+              font-size: 1rem;
+              padding: .2rem;
+            }
+           
+          }
+        }
+  
+        .second {
+          margin-top: 1.5rem;
+        }
+    
+    
+    }
+    
+    }
+    
+  }
+}
+
+
+@media screen and (max-width: 360px) {
+  .container {
+
+  .remetentInfo {
+    margin: .5rem;
+    display: flex;
+    flex-direction: column;
+  
+    font-size: 1rem;
+  
+    >div {
+
+      .first {
+        margin-top:1.2rem;
+        padding: .2rem;
+        li {
+          margin-left: -.8rem;
+          font-size: .9rem;
+          
+  
+          input {
+            font-size: 1rem;
+            padding: .2rem;
+          }
+         
+        }
+      }
+
+      .second {
+        margin-top: 1rem;;
+      }
+  
+     
+  
+  }
+  
+  }
+  
+}
 }

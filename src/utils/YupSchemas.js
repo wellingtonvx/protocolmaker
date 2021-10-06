@@ -25,16 +25,16 @@ export const infoSchema = Yup.object().shape({
   sedeDestino: Yup.string().required({
     msg: "O campo Sede Destino não pode ficar vazio",
   }),
-  tiRemetente: Yup.string().required({
-    msg: "O campo Ti remetente não pode ficar vazio",
-  }),
-  tiDestinatario: Yup.string().required({
-    msg: "O campo Ti destinatário não pode ficar vazio",
-  }),
   tecRemetente: Yup.string().required({
     msg: "O campo Remetente não pode ficar vazio",
   }),
+  tiRemetente: Yup.string().required({
+    msg: "O campo Ti remetente não pode ficar vazio",
+  }),
   tecDestinatario: Yup.string().required({
     msg: "O campo Destinatário não pode ficar vazio",
+  }),
+  tiDestinatario: Yup.string().required({
+    msg: "O campo Ti destinatário não pode ficar vazio",
   }),
 });
