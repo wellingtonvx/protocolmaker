@@ -25,8 +25,6 @@ export function DataContextProvider({ children }) {
     }
   }
 
-  console.log(items);
-
   function handleSetItems(data) {
     setItems(data);
   }

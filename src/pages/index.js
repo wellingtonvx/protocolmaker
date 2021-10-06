@@ -31,7 +31,6 @@ export default function Home() {
       setInfos(data);
       toast.success("Dados salvos");
     } catch (error) {
-      console.log(error);
       error.errors.map((err) => toast.error(err.msg));
     }
   }
@@ -46,7 +45,6 @@ export default function Home() {
 
       CreateProtocol(items, infos, protocolNumber, yearProtocol, obs);
     } catch (error) {
-      console.log(error);
       error.errors.map((err) => toast.error(err.msg));
     }
   }
