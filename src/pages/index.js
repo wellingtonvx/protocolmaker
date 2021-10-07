@@ -43,16 +43,7 @@ export default function Home() {
       formRef.current.setErrors({});
       CreateProtocol(items, infos, protocolNumber, yearProtocol, obs);
     } catch (error) {
-      // error.errors.map((err) => toast.error(err.msg));
-
-      const errorsMessages = {};
-
-      error.inner.forEach((err) => {
-        console.log(err);
-        errorsMessages[err.path] = err.message;
-      });
-
-      formRef.current.setErrors(errorsMessages);
+      error.errors.map((err) => toast.error(err.msg));
     }
   }
 
