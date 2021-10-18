@@ -37,7 +37,7 @@ export function Forms() {
             <Input name="motivo" type="text" />
           </li>
           <li>
-            <Input name="patrimonio" type="number" />
+            <Input name="patrimonio" type="text" />
           </li>
         </ul>
       </div>

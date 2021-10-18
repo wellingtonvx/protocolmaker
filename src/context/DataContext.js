@@ -10,7 +10,7 @@ export function DataContextProvider({ children }) {
 
   async function handleAddData(data) {
     try {
-      if (data.patrimonio === "undefined" || "null") {
+      if (data.patrimonio === "") {
         data.patrimonio = "S/N";
       }
       await itemSchema.validate(data, { abortEarly: false });
